@@ -7,6 +7,8 @@ export default function create() {
   const [media, setMedia] = useState("")
   const [description, setDescription] = useState("")
 
+  const [alert, setAlert] = useState("")
+
 const submitHandle = async (e) => {
   e.preventDefault()
   const mediaUrl = await imageUpload()
@@ -24,9 +26,9 @@ const submitHandle = async (e) => {
   }) 
   const res2 = await res.json()
   if(res2.error){
-    alert(res2.error)
+    setAlert(res2.error)
   } else{
-    alert('data save')
+    setAlert('data save')
   }
 }
 
@@ -51,10 +53,10 @@ const imageUpload = async () => {
         <input name="name" type="text" placeholder='Product Name' className="w-full p-1 border rounded outline-none" value={name} onChange={(e) => setName(e.target.value)}  />
         <input name="price" type="number" placeholder='Price' className="w-full p-1 border rounded outline-none mt-5" value={price} onChange={(e) => setPrice(e.target.value)}  />
         <input accept='image/*' type="file" className="w-full p-1 border rounded outline-none mt-5" onChange={(e) => setMedia(e.target.files[0])}  />
-        <img src={media ? URL.createObjectURL(media) : ""} alt="" />
-
+        <img src={media ? URL.createObjectURL(media) : ""} alt="" />          
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="description" cols="30" rows="10" className="w-full p-1 border rounded outline-none mt-5"></textarea>
-        <button type='submit' className="px-5 py-1 bg-black text-white rounded">Send</button>
+        {alert ? <p className="p-1 rounded text-lg text-black border bg-gray-300">{alert}</p> : ""}
+        <button type='submit' className="w-full py-1 text-lg bg-gray-700 text-center text-white rounded">Submit</button>
       </form>
     </div>
   )

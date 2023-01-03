@@ -5,7 +5,7 @@ import React from 'react'
 export default function Navbar() {
   const router = useRouter()
   return (
-    <header className="bg-blue-500 py-3">
+    <header className="bg-black py-3">
         <nav className="container flex items-center justify-between">
             <Link href="/" className="text-3xl text-white">Logo</Link>
             <div className="flex items-center gap-5 text-lg font-medium">
