@@ -1,51 +1,36 @@
-import productModel from "../../../model/productModel";
+import productModel from '../../../models/productModel'
 export default async (req, res) => {
     try{
         switch (req.method) {
             case "GET":
-                await findProduct(req, res)
+                await productFind(req, res)
                 break;
-
             case "DELETE":
-                await deleteProduct(req, res)
+                await productDelete(req, res)
                 break;
+        
         }
+
     }
     catch(error){
         console.log(error)
-        console.log("product error")
+        console.log('pid error')
         process.exit(1)
+
     }
 }
 
-
-const findProduct = async (req, res) => {
-    try{
-        const {pid} = req.query
-       await productModel.find({_id:pid}).then((product) => {
+const productFind = async (req, res) => {
+    const {pid} = req.query
+    await productModel.find({_id : pid}).then((product) => {
         res.status(200).json(product)
-       })
-      
-    }
-    catch(error){
-        console.log(error)
-        console.log("product find error")
-        process.exit(1)
-    }
+    })
+   
 }
 
-const deleteProduct = async (req, res) => {
-    try{
-        const {pid} = req.query
-       await productModel.findByIdAndDelete({_id:pid})
-       res.status(200).json({})
+const productDelete = async (req, res) => {
+    const {pid} = req.query
+    await productModel.findByIdAndDelete({_id : pid})
 
-      
-      
-    }
-    catch(error){
-        console.log(error)
-        console.log("product delete error")
-        process.exit(1)
-    }
+   res.status(200).json({message: "product deleted"})
 }
