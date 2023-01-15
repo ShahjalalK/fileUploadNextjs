@@ -1,64 +1,79 @@
 import React, { useState } from 'react'
-import baseUrl from '../helpers/baseUrl'
+import baseUrl from '../helper/baseUrl'
+import {parseCookies} from 'nookies'
 
 export default function Create() {
-    const [name, setName] = useState("")
-    const [price, setPrice] = useState("")
-    const [meida, setMedia] = useState("")
-    const [description, setDescription] = useState("")
+  const [name, setName] = useState()
+  const [price, setPrice] = useState()
+  const [media, setMedia] = useState()
+  const [description, setDescription] = useState()
 
-    const [alert, setAlert] = useState("")
-    const submitHandler = async (e) => {
-        e.preventDefault()
-        const mediaUrl = await imageUpload()
-        const res = await fetch(`${baseUrl}/api/mystore`, {
-            method : "POST",
-            headers : {
-                "Content-Type" : "application/json"
-            },
-            body : JSON.stringify({
-                name,
-                price,
-                mediaUrl,
-                description
-            })
-        })
-        const res2 = await res.json()
-        if(res2.error){
-            setAlert(res2.error)
-        }else{
-            setAlert('Product save')
-        }
+  const submitHandler = async (e) => {
+    e.preventDefault()
+    
+    const mediaUrl = await uploadUrl()
+
+    const res = await fetch(`${baseUrl}/api/products`, {
+      method : "POST",
+      headers: {
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        price,
+        mediaUrl,
+        description
+      })
+    })
+
+    const res2 = await res.json()
+
+    if(res2.error){
+      alert(res2.error)
+    }else{
+      alert(res2.success)
     }
 
+  }
 
-    const imageUpload = async () => {
-        const data = new FormData()
-        data.append('file', meida)
-        data.append('upload_preset', 'mystore')
-        data.append('cloud_name', 'dfgnwxo3b')
-        const res = await fetch('https://api.cloudinary.com/v1_1/dfgnwxo3b/image/upload', {
-            method : "POST",
-            body : data
-        })
-        const res2 = await res.json()
-        console.log(res2.url)
-        return res2.url
-    }
+  const uploadUrl = async () => {
+    const data = new FormData()
+    data.append('file', media)
+    data.append('upload_preset', 'mystore')
+    data.append('cloud_name', 'dfgnwxo3b')
+    const res = await fetch('https://api.cloudinary.com/v1_1/dfgnwxo3b/image/upload', {
+      method : "POST",
+      body : data
+    })
+    const res2 = await res.json()
+    return res2.url
+  }
+
   return (
-    <div className="max-w-lg mx-auto py-5">
-        <h1 className="text-5xl text-center mb-5">Product Add</h1>
-        <form className="shadow" onSubmit={submitHandler}>
-            <input type="text" placeholder='Name' value={name} className="w-full border rounded outline-none p-1" onChange={(e) => setName(e.target.value)} />
-            <input type="number" placeholder='Price' value={price} className="w-full border rounded outline-none p-1 mt-5" onChange={(e) => setPrice(e.target.value)}  />
-            <input type="file" accept='image/*' className="w-full border rounded outline-none p-1 mt-5" onChange={(e) => setMedia(e.target.files[0])}  />
-            <img src={meida ? URL.createObjectURL(meida) : "" } alt="" />
-
-            <textarea cols="30" rows="10" value={description} className="w-full border rounded outline-none p-1 mt-5" onChange={(e) => setDescription(e.target.value)}>
-            </textarea>
-           {alert && <p className="p-2 bg-gray-300 text-gray-700 ">{alert}</p>} 
-            <button className="w-full bg-gray-700 text-white p-2 mt-5 rounded">Add Product</button>
-        </form>
+    <div className="max-w-lg mx-auto my-5">
+      <h1 className="text-3xl text-center py-5 uppercase">Create Product</h1>
+      <form className="shadow" onSubmit={submitHandler}>
+        <input type="text" placeholder='Book Name' className="border outline-none rounded w-full p-1 " value={name} onChange={(e) => setName(e.target.value)}  />       
+        <input type="number" placeholder='Price' className="border outline-none rounded w-full p-1 mt-5"  value={price} onChange={(e) => setPrice(e.target.value)} /> 
+        <input type="file" className="border outline-none rounded w-full p-1 mt-5" accept='image/*' onChange={(e) => setMedia(e.target.files[0])}/>       
+         <img src={ media ? URL.createObjectURL(media) : ""} alt="" />      
+        <textarea rows="7" cols="7" placeholder='Description' className="border outline-none rounded w-full p-1 mt-5" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+        <button className='px-7 py-2 bg-gray-500 text-black w-full rounded mt-5 text-lg font-medium' type='submit'>Submit</button>
+      </form>
     </div>
   )
+}
+
+
+export async function getServerSideProps(ctx) {
+  const cookie = parseCookies(ctx)
+  const user = cookie.user ? JSON.parse(cookie.user) : ""
+  if(user.role !== 'admin'){
+    const {res} = ctx
+    res.writeHead(302, {location : "/"})
+    res.end()
+  }
+  return {
+    props: {}, // will be passed to the page component as props
+  }
 }
