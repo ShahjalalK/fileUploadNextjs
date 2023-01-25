@@ -19,9 +19,9 @@ export default async (req, res) => {
         name,
         email,
         password : hassPassword
-    })
-    const cart = cartModel({user : newUser._id})
+    })    
     await newUser.save()
-    await cart.save()
+    const newCart = new cartModel({user : newUser._id})
+    await newCart.save()
     res.status(201).json({message : 'Signup success'})
 }

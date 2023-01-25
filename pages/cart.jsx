@@ -1,14 +1,14 @@
 import React from 'react'
-import basUrl from '../helper/baseUrl'
 import {parseCookies} from 'nookies'
+import baseUrl from '../helper/baseUrl'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 
 export default function Cart({error}) {
   const router = useRouter()
   if(error){
-    Cookies.remove('user')
     Cookies.remove('token')
+    Cookies.remove('user')
     router.push("/login")
   }
   return (
@@ -20,22 +20,21 @@ export async function getServerSideProps(ctx) {
   const {token} = parseCookies(ctx)
   if(!token){
     return {
-      props: {product:[]},
+      props: {products : []}, // will be passed to the page component as props
     }
   }
-  const res = await fetch(`${basUrl}/api/cart`, {
+  const res = await fetch(`${baseUrl}/api/cart`, {
     headers : {
-      "Authorization" : token + 123
+      "Authorization" : token + '123'
     }
   })
-  const product = await res.json()
-console.log('product', product)
-if(product.error){
+  const products = await res.json()
+ if(products.error){
   return {
-    props: {error: product.error},
+    props: {error : products.error}, // will be passed to the page component as props
   }
-}
+ }
   return {
-    props: {product},
+    props: {products}, // will be passed to the page component as props
   }
 }

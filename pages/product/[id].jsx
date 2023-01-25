@@ -3,7 +3,6 @@ import baseUrl from '../../helper/baseUrl'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import { useRouter } from 'next/router'
 import {parseCookies} from 'nookies'
-import Cookies from 'js-cookie'
 import { useState } from 'react'
 
 export default function productId({product}) {    
@@ -26,11 +25,11 @@ export default function productId({product}) {
       },
       body : JSON.stringify({
         quantity,
-        productId : product._id
+        productId: product._id
       })
     })
     const res2 = await res.json()
-    console.log(res2)
+    alert(quantity)
    }
   return (
     <div className="max-w-7xl mx-auto py-5">
