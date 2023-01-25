@@ -16,7 +16,7 @@ export default function Home({products}) {
             {item.price}
           </div>
           <div className="p-5 text-center">
-           <Link href="/" className="text-gray-600">Product Details</Link>
+           <Link href="/product/[id]" as={`/product/${item._id}`} className="text-gray-600">Product Details</Link>
           </div>
         </div>
         )

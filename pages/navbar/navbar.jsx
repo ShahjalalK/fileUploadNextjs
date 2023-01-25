@@ -15,7 +15,7 @@ export default function Navbar() {
        
         
         <div className="flex items-center gap-2">
-       {user.role === 'admin' && user.role === 'root' && <Link href="/create" className={router.asPath == "/create" ? "navLink active" : "navLink"} >Create</Link>} 
+       {user.role === 'admin' && user.role === 'root' && <><Link href="/create" className={router.asPath == "/create" ? "navLink active" : "navLink"} >Create</Link></>} 
        {user.role === 'user' ? 
             <>
             <Link href="/cart" className={router.asPath == "/cart" ? "navLink active" : "navLink"} >Cart</Link>
@@ -30,7 +30,7 @@ export default function Navbar() {
         :
 
         <>
-        
+        <Link href="/cart" className={router.asPath == "/cart" ? "navLink active" : "navLink"} >Cart</Link>
           <Link href="/login" className={router.asPath == "/login" ? "navLink active" : "navLink"} >Login</Link>
             <Link href="/signup" className={router.asPath == "/signup" ? "navLink active" : "navLink"}>Signup</Link>
         </>

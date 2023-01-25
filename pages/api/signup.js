@@ -1,6 +1,7 @@
 import mongoDbConnect from '../../helper/mongoDbConnect'
 import userModel from '../../model/userModel'
 import  bcrypt from 'bcrypt';
+import cartModel from '../../model/cartModel';
 
 mongoDbConnect()
 
@@ -14,11 +15,13 @@ export default async (req, res) => {
         res.status(422).json({error : 'Email All Ready Exixst'})
     }
     const hassPassword = await bcrypt.hash(password, 12)
-    const newSignup = new userModel({
+    const newUser = new userModel({
         name,
         email,
         password : hassPassword
     })
-    await newSignup.save()
+    const cart = cartModel({user : newUser._id})
+    await newUser.save()
+    await cart.save()
     res.status(201).json({message : 'Signup success'})
 }

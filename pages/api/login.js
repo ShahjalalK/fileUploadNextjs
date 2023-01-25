@@ -8,7 +8,7 @@ export default async (req, res) =>{
     }
     const user  = await userModel.findOne({email})
     if(!user){
-        res.status(402).json({error: "Authoris Faild!"})
+        res.status(422).json({error: "Authoris Faild!"})
     }
     const matchPassword = await bcrypt.compare(password, user.password)
     if(matchPassword){
@@ -17,5 +17,8 @@ export default async (req, res) =>{
         })
         const {name, role, email} = user
         res.status(200).json({token, user : {name, role, email}})
+        
+    }else{
+        res.status(422).json({error: "Authoris Faild!"})
     }
 }
