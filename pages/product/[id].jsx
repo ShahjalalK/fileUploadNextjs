@@ -16,7 +16,7 @@ export default function productId({product}) {
     })
     router.push("/")
    }
-   const addToCart = async () => {
+   const addToCart = async () => {    
     const res = await fetch(`${baseUrl}/api/cart`, {
       method : "PUT",
       headers : {
@@ -29,7 +29,7 @@ export default function productId({product}) {
       })
     })
     const res2 = await res.json()
-    alert(quantity)
+    alert(res2.message)
    }
   return (
     <div className="max-w-7xl mx-auto py-5">

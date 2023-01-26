@@ -8,6 +8,10 @@ export default async (req, res) => {
         case "PUT":
             await addToCart(req, res)
             break;
+
+            case "DELETE":
+            await removeProduct(req, res)
+            break;
     }
 }
 
@@ -29,7 +33,7 @@ function Authonticated(iComponents) {
 }
 
 const fetchProduct = Authonticated (async (req, res) => {
-    const cart = await cartModel.findOne({user: req.userId})
+    const cart = await cartModel.findOne({user: req.userId}).populate("products.product")
     res.status(200).json(cart.products)
 })
 
@@ -53,4 +57,18 @@ const addToCart = Authonticated (async (req, res) => {
     res.status(200).json({message : 'Add to cart'})
    }
     
+})
+
+const removeProduct = Authonticated (async (req, res) => {
+        const {productId} = req.body
+        const cart = await cartModel.findOneAndUpdate({user : req.userId}, {
+            $pull : {
+                products : {
+                    product : productId
+                }
+            }
+        },{
+            new : true
+        }).populate("products.product")
+        res.status(200).json(cart.products)
 })
