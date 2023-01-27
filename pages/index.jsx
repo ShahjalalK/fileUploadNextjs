@@ -1,39 +1,26 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import React from 'react'
-import baseUrl from '../helper/baseUrl'
+import basUrl from '../helpers/baseUrl'
 
-export default function Home({products}) {  
+export default function Home() {
+  const loader = ({src}) => {
+    return `${basUrl}${src}`
+  }
   return (
-    <div className="grid grid-cols-5 container gap-5 py-5">
-      {products && products.map((item, index) => {
-        return(
-          <div key={index} className="border rounded overflow-hidden">
-          <div className="relative h-52 overflow-hidden">
-            <img src={item.mediaUrl} alt={item.name} className="h-full w-full object-cover" />
-            <h1 className="absolute bottom-5 text-center w-full text-white text-2xl shadow">{item.name}</h1>
-          </div>
-          <div className="text-xl font-bold p-5 border-b text-center">
-            {item.price}
-          </div>
-          <div className="p-5 text-center">
-           <Link href="/product/[id]" as={`/product/${item._id}`} className="text-gray-600">Product Details</Link>
-          </div>
-        </div>
-        )
-      
-      })}
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-center text-5xl my-5">Hello Shahjalal</h1>
+      <div className="grid grid-cols-4 gap-3">
+        <Image loader={loader} src="/1.jpg" width={300} height={300} className="border rounded"></Image>
+        <Image loader={loader} src="/1.jpg" width={300} height={300} className="border rounded"></Image>
+        <Image loader={loader} src="/1.jpg" width={300} height={300} className="border rounded"></Image>
+        <Image loader={loader} src="/1.jpg" width={300} height={300} className="border rounded"></Image>
+        <Image loader={loader} src="/1.jpg" width={300} height={300} className="border rounded"></Image>
+        {/* <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quasi eligendi sapiente, aspernatur reprehenderit libero architecto non ea. Dolorum, ipsa.</div>
+        <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quasi eligendi sapiente, aspernatur reprehenderit libero architecto non ea. Dolorum, ipsa.</div>
+        <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quasi eligendi sapiente, aspernatur reprehenderit libero architecto non ea. Dolorum, ipsa.</div>
+        <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quasi eligendi sapiente, aspernatur reprehenderit libero architecto non ea. Dolorum, ipsa.</div>
+        <div>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quasi eligendi sapiente, aspernatur reprehenderit libero architecto non ea. Dolorum, ipsa.</div> */}
+      </div>
     </div>
   )
-}
-
-
-
-export async function getStaticProps(context) {
-  const res = await fetch(`${baseUrl}/api/products`)
-  const data = await res.json()
-  return {
-    props: {
-      products : data
-    }, // will be passed to the page component as props
-  }
 }
